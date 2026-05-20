@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Market Sentiment Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">MS</div>
+        <div>
+          <h1>Sentiment</h1>
+          <p>Analyzer // v1.0</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Ticker Symbol</span>
+        <input id="tickerInput" maxlength="10" value="AAPL" autocomplete="off">
+      </label>
+
+      <div class="quick-pick" aria-label="Quick pick tickers">
+        <button data-symbol="AAPL">AAPL</button>
+        <button data-symbol="TSLA">TSLA</button>
+        <button data-symbol="NVDA">NVDA</button>
+        <button data-symbol="MSFT">MSFT</button>
+        <button data-symbol="META">META</button>
+        <button data-symbol="AMZN">AMZN</button>
+        <button data-symbol="GOOGL">GOOGL</button>
+        <button data-symbol="AMD">AMD</button>
+        <button data-symbol="NFLX">NFLX</button>
+        <button data-symbol="JPM">JPM</button>
+        <button data-symbol="V">V</button>
+        <button data-symbol="WMT">WMT</button>
+        <button data-symbol="DIS">DIS</button>
+        <button data-symbol="PFE">PFE</button>
+        <button data-symbol="XOM">XOM</button>
+        <button data-symbol="COIN">COIN</button>
+        <button data-symbol="GME">GME</button>
+        <button data-symbol="AMC">AMC</button>
+        <button data-symbol="MSTR">MSTR</button>
+        <button data-symbol="PLTR">PLTR</button>
+        <button data-symbol="RIVN">RIVN</button>
+        <button data-symbol="LCID">LCID</button>
+        <button data-symbol="NIO">NIO</button>
+        <button data-symbol="BABA">BABA</button>
+        <button data-symbol="HOOD">HOOD</button>
+        <button data-symbol="RDDT">RDDT</button>
+        <button data-symbol="SMCI">SMCI</button>
+        <button data-symbol="DJT">DJT</button>
+        <button data-symbol="SNAP">SNAP</button>
+        <button data-symbol="INTC">INTC</button>
+        <button data-symbol="PYPL">PYPL</button>
+        <button data-symbol="BA">BA</button>
+      </div>
+
+      <div class="panel">
+        <h2>Settings</h2>
+        <label class="field">
+          <span>Sentiment Engine</span>
+          <select id="engineSelect">
+            <option>Live Headline Lexicon</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Lookback Days <strong id="daysValue">7</strong></span>
+          <input id="daysRange" type="range" min="1" max="30" value="7">
+        </label>
+
+        <label class="field">
+          <span>Max Items <strong id="itemsValue">40</strong></span>
+          <input id="itemsRange" type="range" min="10" max="80" step="5" value="40">
+        </label>
+
+        <label class="toggle">
+          <input id="newsToggle" type="checkbox" checked>
+          <span>Include Live News</span>
+        </label>
+        <label class="toggle">
+          <input id="redditToggle" type="checkbox" checked>
+          <span>Include Reddit</span>
+        </label>
+        <a id="compareToggle" class="switch-button" href="#compareSection">
+          <span class="switch-dot"></span>
+          <span>View Multi-stock Compare</span>
+        </a>
+
+        <button id="refreshButton" class="primary-action">Refresh Analysis</button>
+      </div>
+
+      <p class="source-note">
+        Live data: Yahoo Finance price history and Google News RSS headlines.
+        Sentiment is computed locally from current headlines.
+      </p>
+    </aside>
+
+    <main class="dashboard">
+      <section class="ticker-banner">
+        <div>
+          <div id="tickerSymbol" class="symbol">AAPL</div>
+          <div id="companyName" class="company">Apple Inc. - Technology</div>
+        </div>
+        <div class="price-block">
+          <div id="currentPrice" class="price">$214.70</div>
+          <div id="priceChange" class="change positive">+1.42%</div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="Key metrics">
+        <article>
+          <span>Current Price</span>
+          <strong id="priceMetric">$214.70</strong>
+          <em id="priceMetricDelta">+1.42%</em>
+        </article>
+        <article>
+          <span>Sentiment Score</span>
+          <strong id="scoreMetric">+0.384</strong>
+          <em id="dominantMetric">Bullish</em>
+        </article>
+        <article>
+          <span>Bullish Signals</span>
+          <strong id="bullMetric">24</strong>
+          <em id="bullPctMetric">60%</em>
+        </article>
+        <article>
+          <span>Bearish Signals</span>
+          <strong id="bearMetric">8</strong>
+          <em id="bearPctMetric">20%</em>
+        </article>
+        <article>
+          <span>Sources Analysed</span>
+          <strong id="sourcesMetric">40</strong>
+          <em>News + Reddit</em>
+        </article>
+        <article>
+          <span>Market Cap</span>
+          <strong id="capMetric">$3.22T</strong>
+          <em>Estimated</em>
+        </article>
+      </section>
+
+      <section class="chart-grid">
+        <article class="module gauge-module">
+          <div class="section-title">Sentiment Overview</div>
+          <div id="gaugeChart" class="chart-surface gauge-surface"></div>
+        </article>
+        <article class="module">
+          <div class="section-title">Signal Distribution</div>
+          <div id="distributionChart" class="chart-surface distribution-surface"></div>
+        </article>
+      </section>
+
+      <section id="compareSection" class="module compare-module">
+        <div class="section-title">Multi-stock Radar Comparison</div>
+        <div id="compareChart" class="chart-surface compare-surface"></div>
+      </section>
+
+      <section class="module ai-summary">
+        <div class="section-title">AI Market Summary</div>
+        <p id="summaryText"></p>
+      </section>
+
+      <section class="chart-grid">
+        <article class="module wide">
+          <div class="section-title">Sentiment vs Price</div>
+          <div id="priceChart" class="chart-surface price-surface"></div>
+        </article>
+        <article class="module">
+          <div class="section-title">Source Breakdown</div>
+          <div id="sourceChart" class="chart-surface source-surface"></div>
+        </article>
+      </section>
+
+      <section class="module keywords-module">
+        <div class="section-title">Top Sentiment Keywords</div>
+        <div id="keywordCloud" class="keyword-cloud"></div>
+      </section>
+
+      <section class="module">
+        <div class="feed-header">
+          <div class="section-title">Recent Headlines and Posts</div>
+          <div class="tabs" role="tablist" aria-label="Filter headlines">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="Bullish">Bullish</button>
+            <button data-filter="Bearish">Bearish</button>
+          </div>
+        </div>
+        <div id="headlineFeed" class="headline-feed"></div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
